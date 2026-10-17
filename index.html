@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111b">
+<meta name="description" content="Bass Limpio: prueba una interfaz de ecualizador para bajos profundos y claros.">
+<link rel="manifest" href="manifest.json">
+<title>Bass Limpio</title>
+<style>
+:root{color-scheme:dark;--bg:#07111b;--panel:#101f2c;--line:#213748;--text:#f3f7fb;--muted:#a8bdcc;--green:#00e5a8;--blue:#13b8ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#10283a,var(--bg) 48%);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}
+main{max-width:620px;margin:auto;padding:20px 16px 40px}.top{display:flex;align-items:center;gap:12px;margin:8px 0 20px}.logo{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--green),var(--blue));display:grid;place-items:center;color:#05111a;font-size:25px;font-weight:900}.eyebrow{color:var(--green);font-size:12px;letter-spacing:2px;font-weight:800}.title{font-size:27px;font-weight:850;line-height:1.1}.sub{color:var(--muted);font-size:13px;margin-top:5px}
+.panel{background:linear-gradient(150deg,#122434,#0c1924);border:1px solid var(--line);border-radius:22px;padding:18px;margin:14px 0;box-shadow:0 14px 35px #0003}.panel h2{font-size:16px;margin:0 0 14px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.pill{font-size:12px;border:1px solid #1d5b50;color:var(--green);padding:6px 10px;border-radius:99px}button{border:0;border-radius:13px;padding:12px 15px;font-weight:750;font-size:14px;background:var(--green);color:#04140f;cursor:pointer}button.secondary{background:#1a3041;color:var(--text);border:1px solid #294558}button:active{transform:scale(.98)}.buttons{display:flex;gap:8px;flex-wrap:wrap}.buttons button{flex:1;min-width:100px}
+.preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.preset-grid button{background:#172b3a;color:#dceaf3;border:1px solid #294355;padding:12px 5px}.preset-grid button.active{background:#073d34;border-color:var(--green);color:var(--green)}
+.band{display:grid;grid-template-columns:76px 1fr 44px;align-items:center;gap:8px;margin:15px 0}.band label{font-size:12px;color:#c3d3df}.band output{text-align:right;font-size:12px;color:var(--green);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--green)}.range-row{margin:14px 0}.range-row .row{font-size:13px;color:#c3d3df;margin-bottom:8px}
+.notice{color:var(--muted);font-size:12px;line-height:1.55}.meter{height:7px;border-radius:9px;background:#1a2d3c;overflow:hidden;margin-top:12px}.meter span{display:block;width:48%;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:9px}
+footer{text-align:center;color:#7f98aa;font-size:11px;padding:8px 12px}.big-number{font-size:28px;font-weight:850;color:var(--green)}.switchline{display:flex;justify-content:space-between;align-items:center;padding:8px 0}.switchline input{width:20px;height:20px;accent-color:var(--green)}
+</style>
+</head>
+<body>
+<main>
+<header class="top"><div class="logo">♫</div><div><div class="eyebrow">AUDIO LAB · ANDROID</div><div class="title">Bass Limpio</div><div class="sub">Bajos profundos. Voces claras.</div></div></header>
+<section class="panel">
+<div class="row"><h2>Tu perfil de sonido</h2><span class="pill">PRUEBA VISUAL</span></div>
+<div class="preset-grid" id="presets">
+<button data-preset="clean" class="active">Limpio</button><button data-preset="bass">Bajos</button><button data-preset="voice">Voces</button>
+</div>
+<div class="meter"><span id="meterFill"></span></div>
+<p class="notice" id="presetNote">Graves suaves con medios claros para escuchar durante más tiempo.</p>
+</section>
+<section class="panel">
+<div class="row"><h2>Ecualizador de 5 bandas</h2><button class="secondary" id="reset">Restablecer</button></div>
+<div id="bands"></div>
+<p class="notice">Los controles muestran cómo sería el ajuste. Esta demo no cambia el audio de otras aplicaciones ni aplica procesamiento real al sistema.</p>
+</section>
+<section class="panel">
+<h2>Refuerzo de bajos</h2>
+<div class="row"><div><div class="sub">Intensidad elegida</div><div class="big-number"><span id="bassValue">35</span><small style="font-size:14px">%</small></div></div><span class="pill">SIN DISTORSIÓN</span></div>
+<input id="bass" type="range" min="0" max="70" value="35" aria-label="Refuerzo de bajos">
+<div class="range-row"><div class="row"><label for="clarity">Claridad de voces</label><output id="clarityVal">55%</output></div><input id="clarity" type="range" min="0" max="100" value="55"></div>
+<div class="range-row"><div class="row"><label for="volume">Nivel de salida sugerido</label><output id="volumeVal">70%</output></div><input id="volume" type="range" min="20" max="80" value="70"></div>
+<p class="notice">Consejo: si notas vibración áspera o distorsión, reduce los graves. Mantén el volumen moderado para proteger tu audición.</p>
+</section>
+<section class="panel">
+<h2>Siguiente paso</h2>
+<p class="notice">Esta es una maqueta interactiva. Para que el ecualizador procese sonido real, añadiremos un reproductor de audio y efectos compatibles con Android. El control universal de YouTube, Spotify y otras apps no está garantizado.</p>
+<div class="buttons"><button id="install" class="secondary" hidden>Instalar app web</button><button id="about">¿Qué falta para el APK?</button></div>
+<p id="installNote" class="notice"></p>
+</section>
+<footer>Bass Limpio · Prototipo personal · v0.1</footer>
+</main>
+<script>
+const freqs=[["60 Hz",3],["230 Hz",2],["910 Hz",0],["3.6 kHz",1],["14 kHz",1]];
+const bands=document.querySelector("#bands");
+function makeBands(values=freqs.map(x=>x[1])){bands.innerHTML="";freqs.forEach((f,i)=>{const wrap=document.createElement("div");wrap.className="band";wrap.innerHTML=`<label for="band${i}">${f[0]}</label><input id="band${i}" type="range" min="-6" max="6" value="${values[i]}" step="1"><output id="out${i}">${values[i]>0?"+":""}${values[i]} dB</output>`;bands.append(wrap);wrap.querySelector("input").addEventListener("input",e=>{const v=+e.target.value;document.querySelector("#out"+i).textContent=(v>0?"+":"")+v+" dB";});});}
+const profiles={clean:{values:[3,2,0,1,1],note:"Graves suaves con medios claros para escuchar durante más tiempo.",bass:35,clarity:55},bass:{values:[5,4,0,1,1],note:"Más presencia en los graves. Reduce el nivel si el sonido se vuelve áspero.",bass:55,clarity:48},voice:{values:[1,0,2,3,2],note:"Menos énfasis en los graves y mayor presencia de voces.",bass:20,clarity:75}};
+function applyPreset(name){const p=profiles[name];makeBands(p.values);document.querySelector("#presetNote").textContent=p.note;document.querySelector("#bass").value=p.bass;document.querySelector("#bassValue").textContent=p.bass;document.querySelector("#clarity").value=p.clarity;document.querySelector("#clarityVal").textContent=p.clarity+"%";document.querySelectorAll("[data-preset]").forEach(b=>b.classList.toggle("active",b.dataset.preset===name));document.querySelector("#meterFill").style.width=(25+p.bass*.8)+"%";}
+document.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>applyPreset(b.dataset.preset)));
+document.querySelector("#bass").addEventListener("input",e=>{document.querySelector("#bassValue").textContent=e.target.value;document.querySelector("#meterFill").style.width=(25+e.target.value*.8)+"%";});
+document.querySelector("#clarity").addEventListener("input",e=>document.querySelector("#clarityVal").textContent=e.target.value+"%");
+document.querySelector("#volume").addEventListener("input",e=>document.querySelector("#volumeVal").textContent=e.target.value+"%");
+document.querySelector("#reset").addEventListener("click",()=>applyPreset("clean"));
+document.querySelector("#about").addEventListener("click",()=>{document.querySelector("#installNote").textContent="Falta alojar la web por HTTPS y, para APK, empaquetarla con Capacitor y compilar el proyecto Android en un entorno con SDK.";});
+makeBands();
+let deferredPrompt;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;const btn=document.querySelector("#install");btn.hidden=false;btn.onclick=async()=>{deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;btn.hidden=true;};});
+if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body>
+</html>

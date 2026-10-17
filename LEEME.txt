@@ -1,0 +1,23 @@
+BASS LIMPIO WEB - PROTOTIPO 0.1
+
+Qué incluye:
+- Interfaz adaptable a móvil
+- Presets visuales Limpio, Bajos y Voces
+- Controles de ecualización y refuerzo de bajos simulados
+- Archivos de PWA para instalación desde Chrome si se publica por HTTPS
+
+IMPORTANTE:
+Esta versión NO procesa audio real. Es una maqueta interactiva de la interfaz.
+No cambia el sonido de Spotify, YouTube ni otras aplicaciones.
+Para convertirla en APK con Capacitor, se necesita empaquetar los archivos web y compilar
+el proyecto Android en un entorno con Node.js, Android SDK y herramientas de build.
+
+Para probar localmente:
+- Extrae el ZIP.
+- Abre index.html en el navegador para ver la interfaz (la instalación PWA y el modo offline
+  requieren publicar por HTTPS o usar un servidor local).
+
+Documentación oficial:
+https://capacitorjs.com/docs
+https://developer.android.com/studio
+https://support.google.com/chrome/answer/9658361
